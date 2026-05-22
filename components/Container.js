@@ -4,7 +4,6 @@ import { useConfig } from '@/lib/config'
 import Head from 'next/head'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
-// import BlogPost from './BlogPost'
 
 const Container = ({ children, layout, fullWidth, ...customMeta }) => {
   const BLOG = useConfig()
@@ -15,22 +14,26 @@ const Container = ({ children, layout, fullWidth, ...customMeta }) => {
     type: 'website',
     ...customMeta
   }
+  
   return (
     <div>
       <Head>
         <title>{meta.title || 'Blog'}</title>
-        {/* <meta content={BLOG.darkBackground} name="theme-color" /> */}
         <meta name="robots" content="follow, index" />
         <meta charSet="UTF-8" />
-        {BLOG.seo.googleSiteVerification && (
+        
+        {/* 修复核心 1：消除 && 带来的空字符串渲染问题 */}
+        {BLOG.seo.googleSiteVerification ? (
           <meta
             name="google-site-verification"
             content={BLOG.seo.googleSiteVerification}
           />
-        )}
-        {BLOG.seo.keywords && (
+        ) : null}
+        
+        {BLOG.seo.keywords ? (
           <meta name="keywords" content={BLOG.seo.keywords.join(', ')} />
-        )}
+        ) : null}
+        
         <meta name="description" content={meta.description || ''} />
         <meta property="og:locale" content={BLOG.lang || 'en-US'} />
         <meta property="og:title" content={meta.title || ''} />
@@ -42,7 +45,7 @@ const Container = ({ children, layout, fullWidth, ...customMeta }) => {
         <meta
           property="og:image"
           content={`${BLOG.ogImageGenerateURL}/${encodeURIComponent(
-            meta.title || ''
+            meta.title || 'Blog'
           )}.png?theme=dark&md=1&fontSize=125px&images=https%3A%2F%2Fnobelium.vercel.app%2Flogo-for-dark-bg.svg`}
         />
         <meta property="og:type" content={meta.type || 'website'} />
@@ -52,19 +55,22 @@ const Container = ({ children, layout, fullWidth, ...customMeta }) => {
         <meta
           name="twitter:image"
           content={`${BLOG.ogImageGenerateURL}/${encodeURIComponent(
-            meta.title || ''
+            meta.title || 'Blog'
           )}.png?theme=dark&md=1&fontSize=125px&images=https%3A%2F%2Fnobelium.vercel.app%2Flogo-for-dark-bg.svg`}
         />
-        {meta.type === 'article' && (
-          <>
-            <meta
-              property="article:published_time"
-              content={meta.date || ''}
-            />
-            <meta property="article:author" content={BLOG.author || ''} />
-          </>
-        )}
+        
+        {/* 修复核心 2：拆除 Fragment (<></>)，避免标签扁平化报错 */}
+        {meta.type === 'article' ? (
+          <meta
+            property="article:published_time"
+            content={meta.date || ''}
+          />
+        ) : null}
+        {meta.type === 'article' ? (
+          <meta property="article:author" content={BLOG.author || ''} />
+        ) : null}
       </Head>
+      
       <div
         className={`wrapper ${BLOG.font === 'serif' ? 'font-serif' : 'font-sans'
           }`}

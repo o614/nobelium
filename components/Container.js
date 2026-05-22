@@ -18,7 +18,7 @@ const Container = ({ children, layout, fullWidth, ...customMeta }) => {
   return (
     <div>
       <Head>
-        <title>{meta.title}</title>
+        <title>{meta.title || 'Blog'}</title>
         {/* <meta content={BLOG.darkBackground} name="theme-color" /> */}
         <meta name="robots" content="follow, index" />
         <meta charSet="UTF-8" />
@@ -31,10 +31,10 @@ const Container = ({ children, layout, fullWidth, ...customMeta }) => {
         {BLOG.seo.keywords && (
           <meta name="keywords" content={BLOG.seo.keywords.join(', ')} />
         )}
-        <meta name="description" content={meta.description} />
-        <meta property="og:locale" content={BLOG.lang} />
-        <meta property="og:title" content={meta.title} />
-        <meta property="og:description" content={meta.description} />
+        <meta name="description" content={meta.description || ''} />
+        <meta property="og:locale" content={BLOG.lang || 'en-US'} />
+        <meta property="og:title" content={meta.title || ''} />
+        <meta property="og:description" content={meta.description || ''} />
         <meta
           property="og:url"
           content={meta.slug ? `${url}/${meta.slug}` : url}
@@ -42,26 +42,26 @@ const Container = ({ children, layout, fullWidth, ...customMeta }) => {
         <meta
           property="og:image"
           content={`${BLOG.ogImageGenerateURL}/${encodeURIComponent(
-            meta.title
+            meta.title || ''
           )}.png?theme=dark&md=1&fontSize=125px&images=https%3A%2F%2Fnobelium.vercel.app%2Flogo-for-dark-bg.svg`}
         />
-        <meta property="og:type" content={meta.type} />
+        <meta property="og:type" content={meta.type || 'website'} />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:description" content={meta.description} />
-        <meta name="twitter:title" content={meta.title} />
+        <meta name="twitter:description" content={meta.description || ''} />
+        <meta name="twitter:title" content={meta.title || ''} />
         <meta
           name="twitter:image"
           content={`${BLOG.ogImageGenerateURL}/${encodeURIComponent(
-            meta.title
+            meta.title || ''
           )}.png?theme=dark&md=1&fontSize=125px&images=https%3A%2F%2Fnobelium.vercel.app%2Flogo-for-dark-bg.svg`}
         />
         {meta.type === 'article' && (
           <>
             <meta
               property="article:published_time"
-              content={meta.date}
+              content={meta.date || ''}
             />
-            <meta property="article:author" content={BLOG.author} />
+            <meta property="article:author" content={BLOG.author || ''} />
           </>
         )}
       </Head>
